@@ -54,6 +54,7 @@ class Entity:
         self.position = position
         self.direction = direction
         self.color = (randint(0,255), randint(0,255), randint(0,255))
+        self.follow = None
 
     def update_direction(self, target_direction : Position):
         target_direction.check()
@@ -66,12 +67,17 @@ class Entity:
 
         target_vector = Vector(0)
         target_vector.set_polar_coordinates(x,y)
-        
+        target_vector.check()
         relative_direction = target_vector.phi
 
-        if relative_direction > self.direction.phi and relative_direction - self.direction.phi < pi:
+
+        if (relative_direction > self.direction.phi and abs(relative_direction - self.direction.phi) < pi) or (relative_direction < 
+            self.direction.phi and self.direction.phi - relative_direction > pi):
+            
+            print("+")
             self.direction.phi += 0.02
         else: 
+            print("-")
             self.direction.phi -= 0.02
         
         self.direction.check()
@@ -90,6 +96,13 @@ class Entity:
 
         self.position.set_polar_coordinates(x,y)
 
+    def follows(self, follow_entity):
+        self.follow = follow_entity
+    
+    def update(self):
+        self.update_position()
+        self.update_direction(self.follow.position)
+
 def createEntities(number : int):
     entities = []
     for i in range(number):
@@ -100,13 +113,11 @@ def createEntities(number : int):
         v = Vector(v_phi)
         entity = Entity(p,v)
         entities.append(entity)
-    return entities
+       
+    for i in range(len(entities)-1):
+        entities[i].follows(entities[i+1])
 
-def followEntity(entity: Entity, entities : list):
-    i = randint(0, len(entities)-1)
-    while entities[i] == entity:
-        i = randint(0, len(entities)-1)
+
+    entities[len(entities)-1].follows(entities[0])
     
-    entity.update_position()
-    entity.update_direction(entities[i].position)
-
+    return entities
