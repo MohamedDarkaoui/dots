@@ -2,7 +2,7 @@ import pygame
 from pygame.locals import *
 from entity import *
 
-NUMBER_OF_DOTS = 4
+NUMBER_OF_DOTS = 100
 
 
 
@@ -29,7 +29,7 @@ def main():
         for event in pygame.event.get():
             if event.type == QUIT:
                 return
-        pygame.time.wait(10)
+        pygame.time.wait(2)
         screen.fill((0,0,0))
         mouse_press = pygame.mouse.get_pressed()
         mouse_pos = pygame.mouse.get_pos()

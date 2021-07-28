@@ -73,11 +73,8 @@ class Entity:
 
         if (relative_direction > self.direction.phi and abs(relative_direction - self.direction.phi) < pi) or (relative_direction < 
             self.direction.phi and self.direction.phi - relative_direction > pi):
-            
-            print("+")
             self.direction.phi += 0.02
         else: 
-            print("-")
             self.direction.phi -= 0.02
         
         self.direction.check()
